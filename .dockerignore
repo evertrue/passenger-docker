@@ -1,0 +1,6 @@
+.*
+log/
+spec/
+Procfile
+*.md
+.editorconfig
