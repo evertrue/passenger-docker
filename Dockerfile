@@ -9,12 +9,7 @@ EXPOSE 8080
 
 COPY nginx.conf /etc/nginx/sites-enabled/default
 
-RUN apt-get update && apt-get install -y \
-  jq \
-  unzip
-ADD https://s3.amazonaws.com/ops.evertrue.com/pkgs/vault_0.6.0_linux_amd64.zip \
-  vault.zip
-RUN unzip vault.zip -d /usr/local/bin
+RUN gem install vault -v 0.4.0
 
 COPY bin /etc/my_init.d
 

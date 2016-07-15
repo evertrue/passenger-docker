@@ -4,3 +4,5 @@ spec/
 Procfile
 *.md
 .editorconfig
+etc
+container_environment
