@@ -1,4 +1,4 @@
 nginx_enabled: true
-vault_paths:
+vault_env:
   secret/default/global:
     - FURY_AUTH

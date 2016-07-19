@@ -17,42 +17,44 @@ log.info "Copy secrets from #{ENV['VAULT_ADDR']}"
 vault_token_obfuscated = ENV['VAULT_TOKEN'].gsub(/./, '*')
 log.info "VAULT_TOKEN=#{vault_token_obfuscated}"
 
-conf['vault_paths'].each do |vault_path, vault_env_vars|
-  begin
-    Vault.with_retries(Vault::HTTPError) do
-      vault_secrets = Vault.logical.read vault_path
+unless conf['vault_env'].to_h.empty?
+  File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
+    conf['vault_env'].each do |vault_path, vault_env_vars|
+      begin
+        Vault.with_retries(Vault::HTTPError) do
+          vault_secrets = Vault.logical.read vault_path
 
-      if vault_env_vars.is_a? Hash
-        vault_env_vars.each do |env_var_name, vault_key_name|
-          File.write(
-            "/etc/container_environment/#{env_var_name}",
-            vault_secrets.data[vault_key_name.to_sym]
-          )
+          if vault_env_vars.is_a? Hash
+            vault_env_vars.each do |env_var_name, vault_key_name|
+              File.write(
+                "/etc/container_environment/#{env_var_name}",
+                vault_secrets.data[vault_key_name.to_sym]
+              )
+            end
+          elsif vault_env_vars.is_a? Array
+            vault_env_vars.each do |env_var|
+              File.write(
+                "/etc/container_environment/#{env_var}",
+                vault_secrets.data[env_var.to_sym]
+              )
+            end
+          else
+            raise 'Vault env vars must be specified as an array or hash'
+          end
         end
-      elsif vault_env_vars.is_a? Array
-        vault_env_vars.each do |env_var|
-          File.write(
-            "/etc/container_environment/#{env_var}",
-            vault_secrets.data[env_var.to_sym]
-          )
-        end
-      else
-        raise 'Vault env vars must be specified as an array or hash'
-      end
-    end
 
-    if conf['nginx_enabled']
-      File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
         vault_env_vars.each { |env_var_name| f.puts "env #{env_var_name};" }
+      rescue => e
+        abort "\nFAILED TO READ SECRETS FROM VAULT!\n\n#{e}"
       end
-
-      # Enable NGINX
-      File.delete '/etc/service/nginx/down'
     end
-  rescue => e
-    abort "\nFAILED TO READ SECRETS FROM VAULT!\n\n#{e}"
   end
 end
 
 log.info Dir['/etc/container_environment']
 log.info 'Finished Vault env vars init'
+
+if conf['nginx_enabled']
+  log.info 'Enabling NGINX'
+  File.delete '/etc/service/nginx/down'
+end

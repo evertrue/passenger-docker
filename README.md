@@ -20,7 +20,7 @@ FROM evertrue/passenger-ruby22:0.1.0
 You will want to have a YAML file as part of your project that is copied to `/home/app/webapp/image.yml`, which specifies the name of the environment variables you want to set, and the secrets to load them in from in the Vault:
 
 ```yaml
-vault_paths:
+vault_env:
   secret/default/dna:
     EVERTRUE_APP_KEY: evertrue.app_key
     EVERTRUE_AUTH: evertrue.auth
@@ -30,7 +30,7 @@ vault_paths:
 Alternatively, you can just provide an array of env vars, and it will use that as both the key for the Vault data object, and the key for the final env var.
 
 ```yaml
-vault_paths:
+vault_env:
   secret/default/dna:
     - EVERTRUE_APP_KEY
     - EVERTRUE_AUTH
