@@ -37,6 +37,14 @@ vault_paths:
     - ANOTHER_ENV_VAR
 ```
 
+If you need NGINX, you will want to specify:
+
+```yaml
+nginx_enabled: true
+```
+
+in your `image.yml`.
+
 Then, build your project’s image.
 
 ## Development

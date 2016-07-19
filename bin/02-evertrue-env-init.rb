@@ -40,6 +40,15 @@ conf['vault_paths'].each do |vault_path, vault_env_vars|
         raise 'Vault env vars must be specified as an array or hash'
       end
     end
+
+    if conf['nginx_enabled']
+      File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
+        vault_env_vars.each { |env_var_name| f.puts "env #{env_var_name};" }
+      end
+
+      # Enable NGINX
+      File.delete '/etc/service/nginx/down'
+    end
   rescue => e
     abort "\nFAILED TO READ SECRETS FROM VAULT!\n\n#{e}"
   end
@@ -47,6 +56,3 @@ end
 
 log.info Dir['/etc/container_environment']
 log.info 'Finished Vault env vars init'
-
-# TODO generate /etc/nginx/main.d/env.conf
-# TODO run `rm -f /etc/service/nginx/down`
