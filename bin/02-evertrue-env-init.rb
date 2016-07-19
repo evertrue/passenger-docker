@@ -13,7 +13,7 @@ conf = YAML.load ERB.new(File.read('/home/app/webapp/image.yml')).result
 
 log.info 'Starting Vault env vars init'
 
-log.info "Copy secrets from #{ENV['VAULT_ADDR']}"
+log.info "Copying secrets from #{ENV['VAULT_ADDR']}"
 vault_token_obfuscated = ENV['VAULT_TOKEN'].gsub(/./, '*')
 log.info "VAULT_TOKEN=#{vault_token_obfuscated}"
 
@@ -22,6 +22,7 @@ unless conf['vault_env'].to_h.empty?
     conf['vault_env'].each do |vault_path, vault_env_vars|
       begin
         Vault.with_retries(Vault::HTTPError) do
+          log.info "Reading from Vault path #{vault_path}"
           vault_secrets = Vault.logical.read vault_path
 
           if vault_env_vars.is_a? Hash
@@ -43,6 +44,7 @@ unless conf['vault_env'].to_h.empty?
           end
         end
 
+        log.info 'Populating NGINX env var keys'
         vault_env_vars.each { |env_var_name| f.puts "env #{env_var_name};" }
       rescue => e
         abort "\nFAILED TO READ SECRETS FROM VAULT!\n\n#{e}"
