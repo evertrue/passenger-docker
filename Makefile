@@ -33,7 +33,7 @@ release: tag_latest
 	docker push $(NAME)-ruby22
 	docker push $(NAME)-ruby23
 	docker push $(NAME)-full
-	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
+	git tag v$(VERSION) && git push --tags"
 
 clean_images:
 	docker rmi $(NAME)-ruby22:latest $(NAME)-ruby22:$(VERSION) || true
