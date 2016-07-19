@@ -22,9 +22,19 @@ You will want to have a YAML file as part of your project, `config/image.yml`, t
 ```yaml
 vault_paths:
   secret/default/dna:
-    EVERTRUE_APP_KEY: EVERTRUE_APP_KEY
-    EVERTRUE_AUTH: EVERTRUE_AUTH
+    EVERTRUE_APP_KEY: evertrue.app_key
+    EVERTRUE_AUTH: evertrue.auth
     ANOTHER_ENV_VAR: another_vault_secret_data_key
+```
+
+Alternatively, you can just provide an array of env vars, and it will use that as both the key for the Vault data object, and the key for the final env var.
+
+```yaml
+vault_paths:
+  secret/default/dna:
+    - EVERTRUE_APP_KEY
+    - EVERTRUE_AUTH
+    - ANOTHER_ENV_VAR
 ```
 
 Then, build your project’s image.
