@@ -38,3 +38,21 @@ vault_paths:
 ```
 
 Then, build your project’s image.
+
+## Development
+
+The version for this image is set in the `Makefile`, please be sure to rev it before building and pushing new versions of the images this project generates.
+
+To build an individual image, look in the `Makefile` for the corresponding build task.
+
+To build them all:
+
+```bash
+$ make all
+```
+
+To perform a release:
+
+```bash
+$ make release
+```
