@@ -9,7 +9,11 @@ require 'vault'
 log = Logger.new STDOUT
 
 # Load app config from YAML supplied by downstream image
-conf = YAML.load ERB.new(File.read('/home/app/webapp/image.yml')).result
+conf = if File.exist? '/home/app/webapp/image.yml'
+         YAML.load ERB.new(File.read('/home/app/webapp/image.yml')).result
+       else
+         {}
+       end
 
 log.info 'Starting Vault env vars init'
 
