@@ -1,10 +1,10 @@
 # EverTrue Ruby Docker baseimage
 
-This provides a base image, itself based on the various flavors of [`phusion/passenger-docker`](https://github.com/phusion/passenger-docker), to provide a consistent base for a Docker containerized project that wishes to make use of [Vault](https://vaultproject.io).
+This provides a base image, itself based on the various flavors of [`phusion/passenger-docker`](https://github.com/phusion/passenger-docker), to provide a consistent set of features commonly used in EverTrue Docker-ized apps.
 
-This involves:
+Specifically, those features are:
 
-* Bootstrapping secrets from Vault into environment variables
+* Bootstrapping secrets from [Vault](https://vaultproject.io) into environment variables
     - A file listing the env vars for NGINX is generated as well
 * Enabling NGINX if desired
 
