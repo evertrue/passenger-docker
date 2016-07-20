@@ -56,7 +56,7 @@ unless conf['vault_env'].to_h.empty?
     end
   end
 
-  log.info Dir['/etc/container_environment']
+  log.info Dir['/etc/container_environment/*']
   log.info 'Finished Vault env vars init'
 end
 
