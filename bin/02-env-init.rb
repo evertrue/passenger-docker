@@ -15,13 +15,13 @@ conf = if File.exist? '/home/app/webapp/image.yml'
          {}
        end
 
-log.info 'Starting Vault env vars init'
-
-log.info "Copying secrets from #{ENV['VAULT_ADDR']}"
-vault_token_obfuscated = ENV['VAULT_TOKEN'].gsub(/./, '*')
-log.info "VAULT_TOKEN=#{vault_token_obfuscated}"
-
 unless conf['vault_env'].to_h.empty?
+  log.info 'Starting Vault env vars init'
+
+  log.info "Copying secrets from #{ENV['VAULT_ADDR']}"
+  vault_token_obfuscated = ENV['VAULT_TOKEN'].gsub(/./, '*')
+  log.info "VAULT_TOKEN=#{vault_token_obfuscated}"
+
   File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
     conf['vault_env'].each do |vault_path, vault_env_vars|
       begin
@@ -55,10 +55,10 @@ unless conf['vault_env'].to_h.empty?
       end
     end
   end
-end
 
-log.info Dir['/etc/container_environment']
-log.info 'Finished Vault env vars init'
+  log.info Dir['/etc/container_environment']
+  log.info 'Finished Vault env vars init'
+end
 
 if conf['nginx_enabled']
   log.info 'Enabling NGINX'
