@@ -1,5 +1,6 @@
 def name = 'registry.evertrue.com/evertrue/passenger'
 def safeBranchName = env.BRANCH_NAME.replaceAll(/\//, "-")
+def tag = "${safeBranchName}-${env.BUILD_ID}"
 
 node {
   try {
@@ -8,18 +9,23 @@ node {
 
     stage 'Build Docker images'
       parallel ruby22: {
-        buildImage('ruby22', safeBranchName)
+        buildImage('ruby22', tag)
       }, ruby23: {
-        buildImage('ruby23', safeBranchName)
+        buildImage('ruby23', tag)
       }, full: {
-        buildImage('full', safeBranchName)
+        buildImage('full', tag)
       },
       failFast: true
 
     stage 'Push Docker images'
-      sh "docker push ${name}-ruby22:${safeBranchName}-${env.BUILD_ID}"
-      sh "docker push ${name}-ruby23:${safeBranchName}-${env.BUILD_ID}"
-      sh "docker push ${name}-full:${safeBranchName}-${env.BUILD_ID}"
+      parallel ruby22: {
+        pushImage("${name}-ruby22", tag)
+      }, ruby23: {
+        pushImage("${name}-ruby23", tag)
+      }, full: {
+        pushImage("${name}-full", tag)
+      },
+      failFast: true
 
     slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success (<${env.BUILD_URL}|Open>)"
   } catch (e) {
@@ -31,6 +37,10 @@ node {
   step([$class: 'GitHubCommitStatusSetter'])
 }
 
-def buildImage(image, safeBranchName) {
-  sh "docker build -t registry.evertrue.com/evertrue/passenger-${image}:${safeBranchName}-${env.BUILD_ID} -f Dockerfile-${image} ."
+def buildImage(image, tag) {
+  sh "docker build -t registry.evertrue.com/evertrue/passenger-${image}:${tag} -f Dockerfile-${image} ."
+}
+
+def pushImage(image, tag) {
+  sh "docker push ${image}:${tag}"
 }
