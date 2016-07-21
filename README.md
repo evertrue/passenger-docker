@@ -1,26 +1,36 @@
 # EverTrue Ruby Docker baseimage
 
-This provides a base image, itself based on `phusion/passenger-ruby22` and its variants, to provide a consistent base for all EverTrue containerized projects.
+This provides a base image, itself based on the various flavors of [`phusion/passenger-docker`](https://github.com/phusion/passenger-docker), to provide a consistent set of features commonly used in EverTrue Docker-ized apps.
 
-Primarily, this involves:
+Specifically, those features are:
 
-* Bootstrapping secrets from Vault into environment variables
-* Enabled NGINX if needed and, if so:
-    - Setting NGINX’s server config
-    - Adding a file listing the env var keys that NGINX should preserve in its environment
+* Bootstrapping secrets from [Vault](https://vaultproject.io) into environment variables
+    - A file listing the env vars for NGINX is generated as well
+* Enabling NGINX if desired
 
 ## Usage
 
-Add this to the top of your project’s `Dockerfile`:
+Three images are built from this project:
+
+* `evertrue/passenger-ruby22`
+* `evertrue/passenger-ruby23`
+* `evertrue/passenger-full`
+
+Add one of those to top of your project’s `Dockerfile`, specifying a tag:
 
 ```
-FROM evertrue/passenger-ruby22:0.1.0
+FROM registry.evertrue.com/evertrue/passenger-ruby22:0.2.0
 ```
 
-You will want to have a YAML file as part of your project, `config/image.yml`, that specifies the name of the environment variables you want to set, and the secrets to load them in from in the Vault:
+### Config
+
+In order to customize the init process, a YAML config file will need to be provided.
+
+Here is an example `image.yml` that enables NGINX and sets up a set of env vars from Vault:
 
 ```yaml
-vault_paths:
+nginx_enabled: true
+vault_env:
   secret/default/dna:
     EVERTRUE_APP_KEY: evertrue.app_key
     EVERTRUE_AUTH: evertrue.auth
@@ -30,11 +40,19 @@ vault_paths:
 Alternatively, you can just provide an array of env vars, and it will use that as both the key for the Vault data object, and the key for the final env var.
 
 ```yaml
-vault_paths:
+vault_env:
   secret/default/dna:
     - EVERTRUE_APP_KEY
     - EVERTRUE_AUTH
     - ANOTHER_ENV_VAR
+```
+
+If you omit `nginx_enabled`, it will be left disabled (the default state for the Phusion Passenger images).
+
+Ensure that the `image.yml` is placed at `/home/app/webapp/image.yml`:
+
+```
+COPY config/image.yml /home/app/webapp/image.yml
 ```
 
 Then, build your project’s image.

@@ -1,5 +1,5 @@
 NAME = registry.evertrue.com/evertrue/passenger
-VERSION = 0.1.0
+VERSION = 0.2.1
 
 .PHONY: all build_all \
 		build_ruby_22 build_ruby23 build_full \
@@ -33,7 +33,7 @@ release: tag_latest
 	docker push $(NAME)-ruby22
 	docker push $(NAME)-ruby23
 	docker push $(NAME)-full
-	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
+	git tag v$(VERSION) && git push --tags"
 
 clean_images:
 	docker rmi $(NAME)-ruby22:latest $(NAME)-ruby22:$(VERSION) || true
