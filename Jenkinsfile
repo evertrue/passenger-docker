@@ -8,11 +8,11 @@ node {
 
     stage 'Build Docker images'
       parallel ruby22: {
-        buildImage('ruby22')
+        buildImage('ruby22', safeBranchName)
       }, ruby23: {
-        buildImage('ruby23')
+        buildImage('ruby23', safeBranchName)
       }, full: {
-        buildImage('full')
+        buildImage('full', safeBranchName)
       },
       failFast: true
 
@@ -31,6 +31,6 @@ node {
   step([$class: 'GitHubCommitStatusSetter'])
 }
 
-def buildImage(image) {
+def buildImage(image, safeBranchName) {
   sh "docker build -t registry.evertrue.com/evertrue/passenger-${image}:${safeBranchName}-${env.BUILD_ID} -f Dockerfile-${image} ."
 }
