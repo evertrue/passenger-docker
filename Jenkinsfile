@@ -1,22 +1,31 @@
 def name = 'registry.evertrue.com/evertrue/passenger'
 def safeBranchName = env.BRANCH_NAME.replaceAll(/\//, "-")
 
-stage 'Build Docker images'
-  parallel ruby22: {
-    buildImage('ruby22')
-  }, ruby23: {
-    buildImage('ruby23')
-  }, full: {
-    buildImage('full')
-  },
-  failFast: true
+try {
+  stage 'Build Docker images'
+    parallel ruby22: {
+      buildImage('ruby22')
+    }, ruby23: {
+      buildImage('ruby23')
+    }, full: {
+      buildImage('full')
+    },
+    failFast: true
 
-node {
-  stage 'Push Docker images'
-    sh "docker push ${name}-ruby22:${safeBranchName}-${env.BUILD_ID}"
-    sh "docker push ${name}-ruby23:${safeBranchName}-${env.BUILD_ID}"
-    sh "docker push ${name}-full:${safeBranchName}-${env.BUILD_ID}"
+  node {
+    stage 'Push Docker images'
+      sh "docker push ${name}-ruby22:${safeBranchName}-${env.BUILD_ID}"
+      sh "docker push ${name}-ruby23:${safeBranchName}-${env.BUILD_ID}"
+      sh "docker push ${name}-full:${safeBranchName}-${env.BUILD_ID}"
+  }
+  slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success (<${env.BUILD_URL}|Open>)"
+} catch (e) {
+  currentBuild.result = "FAILED"
+  slackSend color: 'bad', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
+  throw e
 }
+
+step([$class: 'GitHubCommitStatusSetter'])
 
 def buildImage(image) {
   node {
