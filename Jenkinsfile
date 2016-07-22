@@ -44,7 +44,6 @@ def buildImage(image, tag) {
 def pushImage(image, tag) {
   sh "docker push ${image}:${tag}"
   if (env.BRANCH_NAME == 'master' ) {
-    sh "docker tag ${image}:${tag} ${image}:latest"
-    sh "docker push ${image}:latest"
+    sh "make release"
   }
 }
