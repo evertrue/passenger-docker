@@ -19,7 +19,7 @@ Three images are built from this project:
 Add one of those to top of your project’s `Dockerfile`, specifying a tag:
 
 ```
-FROM registry.evertrue.com/evertrue/passenger-ruby22:0.2.0
+FROM registry.evertrue.com/evertrue/passenger-ruby22:1.0.0
 ```
 
 ### Config
