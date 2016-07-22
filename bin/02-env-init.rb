@@ -49,6 +49,13 @@ unless conf['vault_env'].to_h.empty?
         end
 
         log.info 'Populating NGINX env var keys'
+        # Whitelist of values that do not come from Vault, but should
+        # be preserved in NGINX’s environment
+        %w(
+          CHEF_ENV
+          VAULT_TOKEN
+          VAULT_ADDR
+        ).each { |env_var_name| f.puts "env #{env_var_name};" }
         vault_env_vars.each { |env_var_name| f.puts "env #{env_var_name};" }
       rescue => e
         abort "\nFAILED TO READ SECRETS FROM VAULT!\n\n#{e}"
