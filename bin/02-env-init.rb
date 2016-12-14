@@ -9,13 +9,11 @@ require 'vault'
 log = Logger.new STDOUT
 
 def validate_environment!
-  %w(CHEF_ENV VAULT_TOKEN VAULT_ADDR).each do |env_var|
+  %w(VAULT_TOKEN VAULT_ADDR).each do |env_var|
     fail "Environment variable #{env_var} is required but not defined" unless ENV[env_var]
     fail "Environment variable #{env_var} needs a value but is empty" if ENV[env_var].empty?
   end
 end
-
-validate_environment!
 
 # Load app config from YAML supplied by downstream image
 conf = if File.exist? '/home/app/webapp/image.yml'
@@ -25,6 +23,7 @@ conf = if File.exist? '/home/app/webapp/image.yml'
        end
 
 unless conf['vault_env'].to_h.empty?
+  validate_environment!
   log.info 'Starting Vault env vars init'
 
   log.info "Copying secrets from #{ENV['VAULT_ADDR']}"
