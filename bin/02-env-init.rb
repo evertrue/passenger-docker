@@ -8,6 +8,15 @@ require 'vault'
 # Nicer logging for Docker
 log = Logger.new STDOUT
 
+def validate_environment!
+  %w(CHEF_ENV VAULT_TOKEN VAULT_ADDR).each do |env_var|
+    fail "Environment variable #{env_var} is required but not defined" unless ENV[env_var]
+    fail "Environment variable #{env_var} needs a value but is empty" if ENV[env_var].empty?
+  end
+end
+
+validate_environment!
+
 # Load app config from YAML supplied by downstream image
 conf = if File.exist? '/home/app/webapp/image.yml'
          YAML.load ERB.new(File.read('/home/app/webapp/image.yml')).result
