@@ -12,6 +12,8 @@ node {
         buildImage('ruby22', tag)
       }, ruby23: {
         buildImage('ruby23', tag)
+      }, ruby24: {
+        buildImage('ruby24', tag)
       }, full: {
         buildImage('full', tag)
       },
@@ -22,6 +24,8 @@ node {
         pushImage("${name}-ruby22", tag)
       }, ruby23: {
         pushImage("${name}-ruby23", tag)
+      }, ruby24: {
+        pushImage("${name}-ruby24", tag)
       }, full: {
         pushImage("${name}-full", tag)
       },

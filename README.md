@@ -14,12 +14,13 @@ Three images are built from this project:
 
 * `evertrue/passenger-ruby22`
 * `evertrue/passenger-ruby23`
+* `evertrue/passenger-ruby24`
 * `evertrue/passenger-full`
 
 Add one of those to top of your project’s `Dockerfile`, specifying a tag:
 
 ```
-FROM registry.evertrue.com/evertrue/passenger-ruby22:1.0.0
+FROM registry.evertrue.com/evertrue/passenger-ruby24:0.9.20
 ```
 
 ### Config
