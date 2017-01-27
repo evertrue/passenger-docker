@@ -2,7 +2,7 @@ NAME = registry.evertrue.com/evertrue/passenger
 VERSION = 0.9.20
 
 .PHONY: all build_all \
-		build_ruby_22 build_ruby23 build_ruby24 build_full \
+		build_ruby22 build_ruby23 build_ruby24 build_full \
 		tag_latest release clean_images
 
 all: build_all
