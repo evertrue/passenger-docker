@@ -21,13 +21,13 @@ node {
 
     stage 'Push Docker images'
       parallel ruby22: {
-        pushImage("${name}-ruby22", tag)
+        pushImage('ruby22', tag)
       }, ruby23: {
-        pushImage("${name}-ruby23", tag)
+        pushImage('ruby23', tag)
       }, ruby24: {
-        pushImage("${name}-ruby24", tag)
+        pushImage('ruby24', tag)
       }, full: {
-        pushImage("${name}-full", tag)
+        pushImage('full', tag)
       },
       failFast: true
 
@@ -42,12 +42,13 @@ node {
 }
 
 def buildImage(image, tag) {
-  sh "docker build -t registry.evertrue.com/evertrue/passenger-${image}:${tag} -f Dockerfile-${image} ."
+  sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
 }
 
 def pushImage(image, tag) {
-  sh "docker push ${image}:${tag}"
   if (env.BRANCH_NAME == 'master' ) {
-    sh "make release"
+    sh "make build_${image}"
+  } else {
+    sh "docker push ${name}-${image}:${tag}"
   }
 }
