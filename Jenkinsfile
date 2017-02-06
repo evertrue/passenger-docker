@@ -9,25 +9,25 @@ node {
 
     stage 'Build Docker images'
       parallel ruby22: {
-        buildImage('ruby22', tag)
+        buildImage('ruby22', tag, name)
       }, ruby23: {
-        buildImage('ruby23', tag)
+        buildImage('ruby23', tag, name)
       }, ruby24: {
-        buildImage('ruby24', tag)
+        buildImage('ruby24', tag, name)
       }, full: {
-        buildImage('full', tag)
+        buildImage('full', tag, name)
       },
       failFast: true
 
     stage 'Push Docker images'
       parallel ruby22: {
-        pushImage('ruby22', tag)
+        pushImage('ruby22', tag, name)
       }, ruby23: {
-        pushImage('ruby23', tag)
+        pushImage('ruby23', tag, name)
       }, ruby24: {
-        pushImage('ruby24', tag)
+        pushImage('ruby24', tag, name)
       }, full: {
-        pushImage('full', tag)
+        pushImage('full', tag, name)
       },
       failFast: true
 
@@ -41,11 +41,11 @@ node {
   step([$class: 'GitHubCommitStatusSetter'])
 }
 
-def buildImage(image, tag) {
+def buildImage(image, tag, name) {
   sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
 }
 
-def pushImage(image, tag) {
+def pushImage(image, tag, name) {
   if (env.BRANCH_NAME == 'master' ) {
     sh "make build_${image}"
   } else {
