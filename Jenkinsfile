@@ -19,18 +19,6 @@ node {
       },
       failFast: true
 
-    stage 'Push Docker images'
-      parallel ruby22: {
-        pushImage('ruby22', tag, name)
-      }, ruby23: {
-        pushImage('ruby23', tag, name)
-      }, ruby24: {
-        pushImage('ruby24', tag, name)
-      }, full: {
-        pushImage('full', tag, name)
-      },
-      failFast: true
-
     slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success (<${env.BUILD_URL}|Open>)"
   } catch (e) {
     currentBuild.result = "FAILED"
@@ -42,13 +30,10 @@ node {
 }
 
 def buildImage(image, tag, name) {
-  sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
-}
-
-def pushImage(image, tag, name) {
   if (env.BRANCH_NAME == 'master' ) {
     sh "make build_${image}"
   } else {
+    sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
     sh "docker push ${name}-${image}:${tag}"
   }
 }

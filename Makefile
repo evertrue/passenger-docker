@@ -36,11 +36,11 @@ release: tag_latest
 	@if ! docker images $(NAME)-ruby23 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-ruby23 version $(VERSION) is not yet built. Please run 'make build_ruby23'"; false; fi
 	@if ! docker images $(NAME)-ruby24 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-ruby24 version $(VERSION) is not yet built. Please run 'make build_ruby24'"; false; fi
 	@if ! docker images $(NAME)-full | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-full version $(VERSION) is not yet built. Please run 'make build_full'"; false; fi
-	docker push $(NAME)-ruby22
-	docker push $(NAME)-ruby23
-	docker push $(NAME)-ruby24
-	docker push $(NAME)-full
-	git tag v$(VERSION) && git push --tags"
+	docker push $(NAME)-ruby22:$(VERSION)
+	docker push $(NAME)-ruby23:$(VERSION)
+	docker push $(NAME)-ruby24:$(VERSION)
+	docker push $(NAME)-full:$(VERSION)
+	git tag v$(VERSION) && git push --tags
 
 clean_images:
 	docker rmi $(NAME)-ruby22:latest $(NAME)-ruby22:$(VERSION) || true
