@@ -31,7 +31,7 @@ node {
 
 def buildImage(image, tag, name) {
   if (env.BRANCH_NAME == 'master' ) {
-    sh "make build_${image}"
+    sh "make build_${image} && make release"
   } else {
     sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
     sh "docker push ${name}-${image}:${tag}"
