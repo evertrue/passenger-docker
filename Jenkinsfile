@@ -9,21 +9,13 @@ node {
 
     stage 'Build Docker images'
       parallel ruby22: {
-        buildImage('ruby22', tag)
+        buildImage('ruby22', tag, name)
       }, ruby23: {
-        buildImage('ruby23', tag)
+        buildImage('ruby23', tag, name)
+      }, ruby24: {
+        buildImage('ruby24', tag, name)
       }, full: {
-        buildImage('full', tag)
-      },
-      failFast: true
-
-    stage 'Push Docker images'
-      parallel ruby22: {
-        pushImage("${name}-ruby22", tag)
-      }, ruby23: {
-        pushImage("${name}-ruby23", tag)
-      }, full: {
-        pushImage("${name}-full", tag)
+        buildImage('full', tag, name)
       },
       failFast: true
 
@@ -37,13 +29,7 @@ node {
   step([$class: 'GitHubCommitStatusSetter'])
 }
 
-def buildImage(image, tag) {
-  sh "docker build -t registry.evertrue.com/evertrue/passenger-${image}:${tag} -f Dockerfile-${image} ."
-}
-
-def pushImage(image, tag) {
-  sh "docker push ${image}:${tag}"
-  if (env.BRANCH_NAME == 'master' ) {
-    sh "make release"
-  }
+def buildImage(image, tag, name) {
+  sh "docker build -t ${name}-${image}:${tag} -f Dockerfile-${image} ."
+  sh "docker push ${name}-${image}:${tag}"
 }

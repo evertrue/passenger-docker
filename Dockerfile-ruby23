@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby23:0.9.19
+FROM phusion/passenger-ruby23:0.9.20
 MAINTAINER EverTrue <devops@evertrue.com>
 
 WORKDIR /home/app/webapp
@@ -7,9 +7,9 @@ CMD ["/sbin/my_init"]
 
 EXPOSE 8080
 
-RUN bash -lc 'rvm --default use ruby-2.3.1'
+RUN bash -lc 'rvm --default use ruby-2.3.3'
 
-COPY nginx.conf /etc/nginx/sites-enabled/default
+COPY nginx-ruby23.conf /etc/nginx/sites-enabled/default
 
 RUN gem install vault -v 0.4.0
 
