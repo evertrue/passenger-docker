@@ -13,4 +13,8 @@ COPY nginx-ruby24.conf /etc/nginx/sites-enabled/default
 
 RUN gem install vault -v 0.10.1
 
+RUN gem install et-rails-vault-env-init -a https://$FURY_AUTH@gem.fury.io/evertrue
+
+COPY `rvm gemdir`/gems/et-rails-vault-env-init-1.0.0/bin/02-vault-env-init.rb bin
+
 COPY bin /etc/my_init.d
