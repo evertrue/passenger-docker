@@ -7,7 +7,7 @@ CMD ["/sbin/my_init"]
 
 EXPOSE 8080
 
-RUN bash -lc 'rvm --default use ruby-2.2.5'
+RUN bash -lc 'rvm --default use ruby-2.2.8'
 
 COPY nginx-ruby22.conf /etc/nginx/sites-enabled/default
 
