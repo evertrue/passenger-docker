@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby22:0.9.22
+FROM phusion/passenger-ruby22:0.9.28
 MAINTAINER EverTrue <devops@evertrue.com>
 
 WORKDIR /home/app/webapp
