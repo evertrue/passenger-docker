@@ -1,0 +1,16 @@
+FROM phusion/passenger-ruby25:0.9.35
+MAINTAINER EverTrue <devops@evertrue.com>
+
+WORKDIR /home/app/webapp
+
+CMD ["/sbin/my_init"]
+
+EXPOSE 8080
+
+RUN bash -lc 'rvm --default use ruby-2.5.1'
+
+COPY nginx-ruby25.conf /etc/nginx/sites-enabled/default
+
+RUN gem install vault -v 0.10.1
+
+COPY bin /etc/my_init.d
