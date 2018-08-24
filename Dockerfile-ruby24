@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby24:0.9.22
+FROM phusion/passenger-ruby24:0.9.35
 MAINTAINER EverTrue <devops@evertrue.com>
 
 WORKDIR /home/app/webapp
@@ -7,7 +7,7 @@ CMD ["/sbin/my_init"]
 
 EXPOSE 8080
 
-RUN bash -lc 'rvm --default use ruby-2.4.1'
+RUN bash -lc 'rvm --default use ruby-2.4.4'
 
 COPY nginx-ruby24.conf /etc/nginx/sites-enabled/default
 
