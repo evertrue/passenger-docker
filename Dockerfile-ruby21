@@ -11,6 +11,8 @@ RUN bash -lc 'rvm --default use ruby-2.1.9'
 
 COPY nginx-ruby21.conf /etc/nginx/sites-enabled/default
 
+# Install Vault and AWS Secrets Manager for credential storage
 RUN gem install vault -v 0.10.1
+RUN gem install aws-sdk-secretsmanager -v 1.6.0
 
 COPY bin /etc/my_init.d
