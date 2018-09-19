@@ -10,10 +10,14 @@ require 'json'
 # Nicer logging for Docker
 log = Logger.new STDOUT
 
+log.info "Starting env-init"
+
 # Load app config from YAML supplied by downstream image
 conf = if File.exist? '/home/app/webapp/image.yml'
+         log.info "Loading image.yml"
          YAML.load ERB.new(File.read('/home/app/webapp/image.yml')).result
        else
+         log.info "Could not find image.yml - skipping setting loading"
          {}
        end
 
@@ -79,27 +83,29 @@ end
 
 unless conf['aws_secrets_env'].to_h.empty?
 
-  # TODO: Move AWS_SECRETS_* values to env vars
-  # TODO: Prefix secrets_path with stage/prod depending on environment
-
-  AWS_SECRETS_REGION = "us-east-1"
-  AWS_SECRETS_ENDPOINT = "https://secretsmanager.us-east-1.amazonaws.com"
+  awsRegion = ENV['AWS_REGION']
+  awsEndpoint = ENV['AWS_SECRETS_ENDPOINT']
+  appEnv = ENV['APP_ENV']
 
   log.info 'Starting AWS Secrets env vars init'
-  log.info "Connecting to secrets client #{AWS_SECRETS_ENDPOINT}"
+  log.info "AWS ECS environment =  #{appEnv}"
+  log.info "AWS Secrets endpoint = #{awsRegion}"
+  log.info "AWS Region =           #{awsEndpoint}"
 
   secretsmanager = Aws::SecretsManager::Client.new(
-    region: AWS_SECRETS_REGION,
-    endpoint: AWS_SECRETS_ENDPOINT
+    region: awsRegion,
+    endpoint: awsEndpoint
   )
 
   File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
     conf['aws_secrets_env'].each do |secrets_path, secret_env_vars|
       begin
-        log.info "Reading from Secrets path #{secrets_path}"
+        secrets = appEnv + '/' + secrets_path
+
+        log.info "Reading from Secrets path #{secrets}"
 
         aws_secrets = secretsmanager.get_secret_value({
-          secret_id: secrets_path
+          secret_id: secrets
         })
 
         if secret_env_vars.is_a? Array
@@ -139,3 +145,5 @@ if conf['nginx_enabled']
   log.info 'Enabling NGINX'
   File.delete '/etc/service/nginx/down'
 end
+
+log.info "Finished env-init"
