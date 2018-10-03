@@ -86,9 +86,11 @@ unless conf['aws_secrets_env'].to_h.empty?
   awsRegion = ENV['AWS_REGION']
   awsEndpoint = ENV['AWS_SECRETS_ENDPOINT']
   appEnv = ENV['APP_ENV']
+  secretsManagerEnv = appEnv =~ /prod/ ? "prod" : "stage"
 
   log.info 'Starting AWS Secrets env vars init'
   log.info "AWS ECS environment = #{appEnv}"
+  log.info "AWS Secrets Manager environment = #{secretsManagerEnv}"
   log.info "AWS Secrets endpoint = #{awsRegion}"
   log.info "AWS Region = #{awsEndpoint}"
 
@@ -100,7 +102,7 @@ unless conf['aws_secrets_env'].to_h.empty?
   File.open('/etc/nginx/main.d/env.conf', 'w+') do |f|
     conf['aws_secrets_env'].each do |secrets_path, secret_env_vars|
       begin
-        secrets = appEnv + '/' + secrets_path
+        secrets = secretsManagerEnv + '/' + secrets_path
 
         log.info "Reading from Secrets path #{secrets}"
 
