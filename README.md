@@ -10,8 +10,9 @@ Specifically, those features are:
 
 ## Usage
 
-Three images are built from this project:
+Five images are built from this project:
 
+* `evertrue/passenger-ruby21`
 * `evertrue/passenger-ruby22`
 * `evertrue/passenger-ruby23`
 * `evertrue/passenger-ruby24`
