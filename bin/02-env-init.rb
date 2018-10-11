@@ -91,8 +91,8 @@ unless conf['aws_secrets_env'].to_h.empty?
   log.info 'Starting AWS Secrets env vars init'
   log.info "AWS ECS environment = #{appEnv}"
   log.info "AWS Secrets Manager environment = #{secretsManagerEnv}"
-  log.info "AWS Secrets endpoint = #{awsRegion}"
-  log.info "AWS Region = #{awsEndpoint}"
+  log.info "AWS Secrets endpoint = #{awsEndpoint}"
+  log.info "AWS Region = #{awsRegion}"
 
   secretsmanager = Aws::SecretsManager::Client.new(
     region: awsRegion,
