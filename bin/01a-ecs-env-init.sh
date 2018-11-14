@@ -52,4 +52,14 @@ echo $PASSENGER_APP_ENV > /etc/container_environment/PASSENGER_APP_ENV
 echo $AWS_REGION > /etc/container_environment/AWS_REGION
 echo $AWS_SECRETS_ENDPOINT > /etc/container_environment/AWS_SECRETS_ENDPOINT
 
+# Provide access to container_environment.sh
+echo "Changing access of /etc/container_environment"
+chmod 644 /etc/container_environment.sh
+
+echo '**********************************************************************************************'
+echo 'To load environment variables in docker exec sh, run the following:'
+echo '- su app'
+echo '- source /etc/container_environment.sh '
+echo '**********************************************************************************************'
+
 echo "Finished ecs-env-init"
