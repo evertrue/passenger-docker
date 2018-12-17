@@ -15,6 +15,3 @@ COPY nginx-ruby24.conf /etc/nginx/sites-enabled/default
 RUN gem install vault -v 0.10.1
 
 COPY bin /etc/my_init.d
-
-# https://github.com/phusion/passenger-docker/issues/224
-RUN rm -f /var/log/nginx/error.log
