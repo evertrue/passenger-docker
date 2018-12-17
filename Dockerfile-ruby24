@@ -9,6 +9,7 @@ EXPOSE 8080
 
 RUN bash -lc 'rvm --default use ruby-2.4.4'
 
+COPY base-nginx.conf /etc/nginx/nginx.conf
 COPY nginx-ruby24.conf /etc/nginx/sites-enabled/default
 
 # Install Vault and AWS Secrets Manager for credential storage
