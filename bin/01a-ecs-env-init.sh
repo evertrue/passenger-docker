@@ -38,7 +38,9 @@ fi
 
 AWS_REGION="us-east-1"
 AWS_SECRETS_ENDPOINT="https://secretsmanager.us-east-1.amazonaws.com"
+GIT_COMMIT=$(cat git_commit)
 
+echo "GIT COMMIT = "$GIT_COMMIT
 echo "APP_ENV = "$APP_ENV
 echo "PASSENGER_APP_ENV = "$PASSENGER_APP_ENV
 echo "AWS_REGION = "$AWS_REGION
