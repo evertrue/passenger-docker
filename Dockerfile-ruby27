@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby26:1.0.8
+FROM phusion/passenger-ruby27:1.0.12
 MAINTAINER EverTrue <devops@evertrue.com>
 
 WORKDIR /home/app/webapp
@@ -7,10 +7,10 @@ CMD ["/sbin/my_init"]
 
 EXPOSE 8080
 
-RUN bash -lc 'rvm --default use ruby-2.6.3'
+RUN bash -lc 'rvm --default use ruby-2.7.2'
 
 COPY base-nginx.conf /etc/nginx/nginx.conf
-COPY nginx-ruby26.conf /etc/nginx/sites-enabled/default
+COPY nginx-ruby27.conf /etc/nginx/sites-enabled/default
 
 # Install Vault and AWS Secrets Manager for credential storage
 RUN gem install vault -v 0.10.1
