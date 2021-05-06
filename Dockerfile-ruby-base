@@ -1,0 +1,20 @@
+FROM phusion/passenger-ruby30:1.0.13
+MAINTAINER EverTrue <devops@evertrue.com>
+
+WORKDIR /home/app/webapp
+
+CMD ["/sbin/my_init"]
+
+EXPOSE 8080
+
+COPY libssl.list /etc/apt/sources.list.d/libssl.list
+RUN apt update && apt-cache policy libssl1.0-dev
+RUN apt-get -y install libssl1.0-dev
+RUN bash -lc 'rvm get stable'
+RUN bash -lc 'rvm uninstall 3.0.0'
+
+COPY bin /etc/my_init.d
+COPY base-nginx.conf /etc/nginx/nginx.conf
+
+# https://github.com/phusion/passenger-docker/issues/224
+RUN rm -f /var/log/nginx/error.log
