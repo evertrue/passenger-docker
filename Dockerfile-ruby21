@@ -4,6 +4,8 @@ MAINTAINER EverTrue <devops@evertrue.com>
 RUN bash -lc 'rvm install ruby-2.1.9'
 RUN bash -lc 'rvm --default use ruby-2.1.9'
 
+RUN apt-get -y install libmysqlclient-dev
+
 COPY nginx-ruby21.conf /etc/nginx/sites-enabled/default
 
 # Install Vault and AWS Secrets Manager for credential storage
