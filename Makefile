@@ -1,13 +1,14 @@
 NAME = registry.evertrue.com/evertrue/passenger
-VERSION = 1.6.0
+VERSION = 2.0.0
 
-.PHONY: all build_all \
+.PHONY: all build_all build_ruby_base \
 		build_ruby21 build_ruby22 build_ruby23 build_ruby24 build_ruby25 build_ruby26 build_ruby27 build_full \
 		tag_latest release clean_images
 
 all: build_all
 
 build_all: \
+	build_ruby_base \
 	build_ruby21 \
 	build_ruby22 \
 	build_ruby23 \
@@ -16,6 +17,9 @@ build_all: \
 	build_ruby26 \
 	build_ruby27 \
 	build_full
+
+build_ruby_base:
+	docker build -t evertrue/passenger-ruby-base:latest -f Dockerfile-ruby-base .
 
 build_ruby21:
 	docker build -t $(NAME)-ruby21:$(VERSION) -f Dockerfile-ruby21 .
@@ -71,6 +75,7 @@ release: tag_latest
 	git tag v$(VERSION) && git push --tags
 
 clean_images:
+	docker rmi evertrue/passenger-ruby-base:latest || true
 	docker rmi $(NAME)-ruby21:latest $(NAME)-ruby21:$(VERSION) || true
 	docker rmi $(NAME)-ruby22:latest $(NAME)-ruby22:$(VERSION) || true
 	docker rmi $(NAME)-ruby23:latest $(NAME)-ruby23:$(VERSION) || true
