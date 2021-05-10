@@ -4,6 +4,7 @@ MAINTAINER EverTrue <devops@evertrue.com>
 RUN bash -lc 'rvm install ruby-2.2.8'
 RUN bash -lc 'rvm --default use ruby-2.2.8'
 
+# Installing older versions of ruby install libssl1.0, which uninstall libmysqlclient-dev
 RUN apt-get -y install libmysqlclient-dev
 
 COPY nginx-ruby22.conf /etc/nginx/sites-enabled/default
