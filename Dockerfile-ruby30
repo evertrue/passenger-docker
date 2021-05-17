@@ -1,0 +1,11 @@
+FROM evertrue/passenger-ruby-base:latest
+MAINTAINER EverTrue <devops@evertrue.com>
+
+RUN bash -lc 'rvm install ruby-3.0.0'
+RUN bash -lc 'rvm --default use ruby-3.0.0'
+
+COPY nginx-ruby30.conf /etc/nginx/sites-enabled/default
+
+# Install Vault and AWS Secrets Manager for credential storage
+RUN gem install vault -v 0.10.1
+RUN gem install aws-sdk-secretsmanager -v 1.6.0
