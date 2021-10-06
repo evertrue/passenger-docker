@@ -1,4 +1,4 @@
-FROM phusion/passenger-full:1.0.13
+FROM phusion/passenger-full:2.0.0
 MAINTAINER EverTrue <devops@evertrue.com>
 
 WORKDIR /home/app/webapp

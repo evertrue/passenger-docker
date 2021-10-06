@@ -11,4 +11,8 @@ COPY nginx-ruby21.conf /etc/nginx/sites-enabled/default
 
 # Install Vault and AWS Secrets Manager for credential storage
 RUN gem install vault -v 0.10.1
+RUN gem install aws-partitions -v 1.452.0
+RUN gem install aws-eventstream -v 1.1.1
+RUN gem install aws-sigv4 -v 1.2.3
+RUN gem install aws-sdk-core -v 3.114.0
 RUN gem install aws-sdk-secretsmanager -v 1.6.0

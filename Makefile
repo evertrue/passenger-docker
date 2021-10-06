@@ -1,5 +1,5 @@
 NAME = registry.evertrue.com/evertrue/passenger
-VERSION = 2.0.0
+VERSION = 2.1.0
 
 .PHONY: all build_all build_ruby_base \
 		build_ruby21 build_ruby22 build_ruby23 build_ruby24 build_ruby25 build_ruby26 build_ruby27 build_ruby30 build_full \
