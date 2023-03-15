@@ -1,5 +1,6 @@
-NAME = registry.evertrue.com/evertrue/passenger
-VERSION = 2.1.0
+REGISTRY = 478370645242.dkr.ecr.us-east-1.amazonaws.com
+NAME = $(REGISTRY)/evertrue/passenger
+VERSION = 2.2.0
 
 .PHONY: all build_all build_ruby_base \
 		build_ruby21 build_ruby22 build_ruby23 build_ruby24 build_ruby25 build_ruby26 build_ruby27 build_ruby30 build_full \
@@ -60,7 +61,10 @@ tag_latest:
 	docker tag $(NAME)-ruby30:$(VERSION) $(NAME)-ruby30:latest
 	docker tag $(NAME)-full:$(VERSION) $(NAME)-full:latest
 
-release: tag_latest
+docker_login:
+	aws --profile evertruetools ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(REGISTRY)
+
+release: tag_latest docker_login
 	@if ! docker images $(NAME)-ruby21 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-ruby21 version $(VERSION) is not yet built. Please run 'make build_ruby21'"; false; fi
 	@if ! docker images $(NAME)-ruby22 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-ruby22 version $(VERSION) is not yet built. Please run 'make build_ruby22'"; false; fi
 	@if ! docker images $(NAME)-ruby23 | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME)-ruby23 version $(VERSION) is not yet built. Please run 'make build_ruby23'"; false; fi

@@ -1,0 +1,76 @@
+Description: >
+    Template for setting up passenger-docker build
+Parameters:
+
+    TemplateBucket:
+        Description: The S3 bucket from which to fetch the templates used by this stack
+        Type: String
+        Default: cloudformation-proj-cross-account-artifactbucket-fc0c7ottwz7q
+
+    ECRBaseRepositoryName:
+        Description: ECR base repository name
+        Type: String
+
+Resources:
+    ECRRuby21:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby21
+
+    ECRRuby22:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby22
+
+    ECRRuby23:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby23
+
+    ECRRuby24:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby24
+
+    ECRRuby25:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby25
+
+    ECRRuby26:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby26
+
+    ECRRuby27:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby27
+
+    ECRRuby30:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-ruby30
+
+    ECRRubyFull:
+        Type: AWS::CloudFormation::Stack
+        Properties:
+            TemplateURL: !Sub https://s3.amazonaws.com/${TemplateBucket}/aws-cicd-cloudformation/master/crossacct-ecr-repository.yaml
+            Parameters:
+                RepositoryName: !Sub ${ECRBaseRepositoryName}-full
