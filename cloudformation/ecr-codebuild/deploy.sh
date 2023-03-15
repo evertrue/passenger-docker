@@ -7,6 +7,6 @@ ToolsAccountProfile=${ToolsAccountProfile:-evertruetools}
 
 StackName=passenger-docker-build
 ECRBaseRepositoryName=evertrue/passenger
-GitHubProjectName=passenger
+GitHubProjectName=passenger-docker
 
 aws cloudformation deploy --stack-name $StackName --template-file ecr-codebuild.yaml --parameter-overrides ECRBaseRepositoryName=$ECRBaseRepositoryName GitHubProjectName=$GitHubProjectName --profile $ToolsAccountProfile
